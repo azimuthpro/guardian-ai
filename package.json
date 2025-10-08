@@ -1,0 +1,38 @@
+{
+  "name": "@azimuthpro/guardian-ai",
+  "version": "0.1.0",
+  "description": "An AI agent that provides real-time monitoring, behavioral analysis, and security for your AI agent workforce.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/azimuthpro/guardian-ai.git"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "security",
+    "monitoring",
+    "llm"
+  ],
+  "author": "AZIMUTH PRO <dev@azimuthpro.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.4"
+  }
+}
