@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Testing
+coverage/
+
+# Environment files
+.env
+.env.local
+
+# OS / Editor
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# Jest cache
+.jest-cache/
+.jest/
