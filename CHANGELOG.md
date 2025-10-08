@@ -1,0 +1,39 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.2.0] - 2025-10-08
+
+### Added
+
+- Core stream tapping functionality with `tapStream()` API
+- Multiple stream adapters: `fromAsyncIterator`, `fromNodeStream`, `fromResponse`
+- Compression support for gzip, deflate, and brotli
+- Upload functionality with configurable endpoints and authentication
+- Customizable logger with namespace and log level support
+- Stream utilities including `streamTee` for stream forking
+- Comprehensive test suite for core functionality
+- TypeScript type definitions and full type safety
+
+### Fixed
+
+- TypeScript compilation errors with ReadableStream imports
+- Type assertion issues in Node.js stream conversion
+- Duplex property type error in fetch RequestInit
+- ESLint configuration updated to flat config format
+
+### Changed
+
+- Upgraded dev dependencies to latest versions (Jest 30, ESLint 9, TypeScript 5.9)
+
+## [0.1.0] - 2025-10-08
+
+### Added
+
+- Initial project scaffolding
+- Basic package configuration

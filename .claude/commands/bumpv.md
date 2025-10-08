@@ -34,7 +34,7 @@ This command implements semantic versioning for the project.
    - Include summary of changes from git commit history
    - Follow semantic versioning links format
 
-4. **Update CLAUDE.md Recent Update section** - **ONLY IF** changes contain important information for LLM model context:
+4. **Update CLAUDE.md and AGENTS.md Recent Update section** - **ONLY IF** changes contain important information for LLM model context:
    - New version number and date
    - Key architectural or technical changes that affect how LLM should work with the codebase
    - Skip this step for minor updates or version bumps without architectural significance
