@@ -1,5 +1,7 @@
 # @azimuthpro/guardian-ai
 
+[![npm version](https://img.shields.io/npm/v/@azimuthpro/guardian-ai.svg)](https://www.npmjs.com/package/@azimuthpro/guardian-ai)
+
 Composable tooling for tapping Node.js and Web streams, mirroring traffic to the Guardian ingest service for real-time AI agent monitoring.
 
 ## Installation
@@ -7,6 +9,8 @@ Composable tooling for tapping Node.js and Web streams, mirroring traffic to the
 ```bash
 npm install @azimuthpro/guardian-ai
 ```
+
+View on npm: [@azimuthpro/guardian-ai](https://www.npmjs.com/package/@azimuthpro/guardian-ai)
 
 ## Quick Start
 

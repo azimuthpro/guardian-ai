@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/azimuthpro/guardian-ai.git"
+    "url": "git+https://github.com/azimuthpro/guardian-ai.git"
   },
   "keywords": [
     "ai",
@@ -26,6 +26,9 @@
   ],
   "author": "AZIMUTH PRO <dev@azimuthpro.com>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",
