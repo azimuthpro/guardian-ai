@@ -1,4 +1,5 @@
 export { tapStream } from './tapStream';
+export { tap } from './tap';
 export { createLogger } from './logger';
 export type {
   TapOptions,

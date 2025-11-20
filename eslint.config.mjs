@@ -20,7 +20,10 @@ export default [
     languageOptions: {
       parser: tsParser,
       parserOptions,
-      globals: globals.node
+      globals: {
+        ...globals.node,
+        NodeJS: 'readonly'
+      }
     },
     plugins: {
       '@typescript-eslint': tsPlugin

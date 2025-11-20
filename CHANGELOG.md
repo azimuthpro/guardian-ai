@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Simplified `tap()` convenience function with automatic stream type detection
+- Auto-detection support for Response, Node.js streams, and Web ReadableStreams
+- Default gzip compression for better performance out of the box
+- Comprehensive implementation examples in README (Next.js, Vercel AI SDK, Express)
+- Production-ready integration patterns with session tracking
+
+### Changed
+
+- README Quick Start updated to showcase simplified `tap()` API
+- ESLint configuration enhanced with NodeJS global type definition
+
 ## [0.2.0] - 2025-10-08
 
 ### Added
