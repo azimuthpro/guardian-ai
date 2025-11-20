@@ -1,7 +1,7 @@
 {
   "name": "@azimuthpro/guardian-ai",
   "version": "0.4.0",
-  "description": "An AI agent that provides real-time monitoring, behavioral analysis, and security for your AI agent workforce.",
+  "description": "Zero-Latency Stream Monitoring & Telemetry for AI Agents.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [

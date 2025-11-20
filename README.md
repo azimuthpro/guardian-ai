@@ -2,7 +2,16 @@
 
 [![npm version](https://img.shields.io/npm/v/@azimuthpro/guardian-ai.svg)](https://www.npmjs.com/package/@azimuthpro/guardian-ai)
 
-Composable tooling for tapping Node.js and Web streams, mirroring traffic to the Guardian ingest service for real-time AI agent monitoring.
+**@azimuthpro/guardian-ai** is a composable telemetry SDK that mirrors Node.js and Web streams to the Guardian ingest service. Designed specifically for LLM workflows and AI agents, it allows developers to "tap" into response streams (like OpenAI, Anthropic, or Vercel AI SDK) to capture full interaction logs in real-time.
+
+Unlike traditional logging, Guardian is **streaming-first** and **non-blocking**. It handles data compression (gzip) and async uploading in the background, ensuring your application remains performant and your users experience zero added latency.
+
+## Key Features
+
+- **Universal Stream Support**: Auto-detects and wraps `Response`, `ReadableStream`, Node.js `Readable`, and `AsyncIterator`
+- **Zero-Latency Overhead**: Mirrors traffic asynchronously; the user stream continues instantly while logs upload in the background
+- **Bandwidth Optimized**: Automatic client-side gzip compression for all telemetry data
+- **Framework Agnostic**: Drop-in support for Next.js (App Router), Express, and the Vercel AI SDK
 
 ## Installation
 
