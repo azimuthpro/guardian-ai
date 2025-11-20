@@ -42,14 +42,16 @@ describe('tapStream', () => {
     jest.resetAllMocks();
   });
 
-  it('tees the stream and uploads the duplicate', async () => {
+  it('tees the stream and uploads with automatic gzip compression', async () => {
     const source = createStreamFromStrings(['hello', 'world']);
-    const captured: string[] = [];
 
     const fetchMock = jest.fn(async (_url, init?: any) => {
       const body = init?.body as ReadableStream<Uint8Array>;
       const chunks = await readStream(body);
-      captured.push(...chunks.map((chunk) => decoder.decode(chunk)));
+      const buffer = Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
+      // Verify data was compressed
+      const decompressed = gunzipSync(buffer);
+      expect(decompressed.toString()).toBe('helloworld');
       return { ok: true, status: 200, body: null } as unknown as Response;
     });
 
@@ -63,21 +65,24 @@ describe('tapStream', () => {
 
     await expect(upload).resolves.toBeUndefined();
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(captured).toEqual(['hello', 'world']);
     const [_url, init] = fetchMock.mock.calls[0];
     expect(init?.duplex).toBe('half');
     expect(init?.headers).toMatchObject({
       Authorization: 'Bearer test-key',
-      'Content-Type': 'application/octet-stream'
+      'Content-Type': 'application/octet-stream',
+      'Content-Encoding': 'gzip'
     });
   });
 
-  it('maps chunks before upload when mapChunk is provided', async () => {
+  it('maps chunks before compression and upload when mapChunk is provided', async () => {
     const source = createStreamFromStrings(['foo', 'bar']);
-    let capturedChunks: Uint8Array[] = [];
     const fetchMock = jest.fn(async (_url, init?: any) => {
       const body = init?.body as ReadableStream<Uint8Array>;
-      capturedChunks = await readStream(body);
+      const chunks = await readStream(body);
+      const buffer = Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
+      // Verify data was mapped and then compressed
+      const decompressed = gunzipSync(buffer);
+      expect(decompressed.toString()).toBe('FOOBAR');
       return { ok: true, status: 200, body: null } as unknown as Response;
     });
 
@@ -88,31 +93,6 @@ describe('tapStream', () => {
     });
 
     await expect(upload).resolves.toBeUndefined();
-    expect(capturedChunks.map((chunk) => decoder.decode(chunk))).toEqual(['FOO', 'BAR']);
-  });
-
-  it('applies gzip compression when requested', async () => {
-    const source = createStreamFromStrings(['compress']);
-    const fetchMock = jest.fn(async (_url, init?: any) => {
-      const body = init?.body as ReadableStream<Uint8Array>;
-      const chunks = await readStream(body);
-      const buffer = Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
-      const decompressed = gunzipSync(buffer);
-      expect(decompressed.toString()).toBe('compress');
-      return { ok: true, status: 200, body: null } as unknown as Response;
-    });
-
-    const { upload } = tapStream(source, {
-      apiKey: 'compress-key',
-      fetchImpl: fetchMock,
-      compression: 'gzip'
-    });
-
-    await expect(upload).resolves.toBeUndefined();
-    const [_url, init] = fetchMock.mock.calls[0];
-    expect(init?.headers).toMatchObject({
-      'Content-Encoding': 'gzip'
-    });
   });
 
   it('invokes callbacks on success and error', async () => {

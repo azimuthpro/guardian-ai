@@ -1,25 +1,18 @@
-import { brotliCompressSync, deflateSync, gzipSync } from 'node:zlib';
+import { gzipSync } from 'node:zlib';
 import { ReadableStream } from 'node:stream/web';
-import { CompressionStrategy } from '../types';
 
-export async function applyCompression(
-  stream: ReadableStream<Uint8Array>,
-  strategy: CompressionStrategy
-): Promise<{ stream: ReadableStream<Uint8Array>; encoding?: string }> {
-  if (strategy === 'none') {
-    return { stream };
-  }
-
+/**
+ * Compresses a stream using gzip compression for upload to Guardian ingest service.
+ * The ingest server always expects gzipped data.
+ *
+ * @param stream - The stream to compress
+ * @returns Compressed stream and encoding header value
+ */
+export async function compressForUpload(
+  stream: ReadableStream<Uint8Array>
+): Promise<{ stream: ReadableStream<Uint8Array>; encoding: string }> {
   const buffer = await readStreamIntoBuffer(stream);
-  const compressed =
-    strategy === 'gzip'
-      ? gzipSync(buffer)
-      : strategy === 'deflate'
-      ? deflateSync(buffer)
-      : brotliCompressSync(buffer);
-
-  const encoding =
-    strategy === 'gzip' ? 'gzip' : strategy === 'deflate' ? 'deflate' : 'br';
+  const compressed = gzipSync(buffer);
 
   const compressedStream = new ReadableStream<Uint8Array>({
     start(controller) {
@@ -28,7 +21,7 @@ export async function applyCompression(
     }
   });
 
-  return { stream: compressedStream, encoding };
+  return { stream: compressedStream, encoding: 'gzip' };
 }
 
 async function readStreamIntoBuffer(stream: ReadableStream<Uint8Array>): Promise<Buffer> {

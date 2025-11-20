@@ -40,13 +40,14 @@ import fs from 'node:fs';
 const source = adapters.fromNodeStream(fs.createReadStream('./agent-trace.log'));
 
 const { client, upload } = tapStream(source, {
-  apiKey: process.env.GUARDIAN_API_KEY,
-  compression: 'gzip'
+  apiKey: process.env.GUARDIAN_API_KEY
 });
 
 client.pipeTo(new WritableStream({ /* ... */ }));
 upload.catch((error) => console.error('Guardian upload failed', error));
 ```
+
+> **Note:** Data is automatically compressed with gzip before upload to the Guardian ingest service.
 
 ## Implementation Examples
 
@@ -75,7 +76,6 @@ export async function POST(request: Request) {
 
   // Tap the stream - auto-detects Response type
   const { client, upload } = tap(upstream, {
-    compression: 'gzip', // Optional: compress upload data
     headers: {
       'X-Session-Id': crypto.randomUUID(),
       'X-User-Id': 'user-123',
@@ -127,7 +127,6 @@ export async function POST(request: Request) {
   // Monitor with Guardian AI
   const sessionId = crypto.randomUUID();
   const { client, upload } = tap(response, {
-    compression: 'gzip', // Optional: compress upload data
     headers: {
       'X-Session-Id': sessionId,
       'X-Model-Name': 'gemini-2.0-flash',
@@ -239,20 +238,20 @@ const { client, upload } = tap(response);
 // With explicit API key
 const { client, upload } = tap(nodeStream, 'gdn_abc123...');
 
-// With compression (recommended for production)
+// With session tracking
 const { client, upload } = tap(response, {
-  compression: 'gzip',
-  headers: { 'X-Session-Id': sessionId },
+  headers: { 'X-Session-Id': crypto.randomUUID() },
 });
 
 // With full options
 const { client, upload } = tap(webStream, {
   apiKey: process.env.GUARDIAN_API_KEY,
-  compression: 'gzip',
-  headers: { 'X-Session-Id': sessionId },
+  headers: { 'X-Session-Id': crypto.randomUUID() },
   onUploadError: console.error,
 });
 ```
+
+> **Note:** All uploads are automatically compressed with gzip before being sent to the Guardian ingest service.
 
 ## tapStream(stream, options)
 
@@ -260,7 +259,6 @@ const { client, upload } = tap(webStream, {
 | --- | --- | --- |
 | `apiKey` | `string` | Guardian API key. Falls back to `process.env.GUARDIAN_API_KEY`. |
 | `endpoint` | `string` | Custom ingest endpoint. Defaults to `https://guardian.azimuthpro.com/ingest`. |
-| `compression` | `'gzip' \| 'deflate' \| 'br' \| 'none'` | Apply HTTP content compression to the upload stream. |
 | `headers` | `Record<string, string>` | Additional headers merged into the upload request. |
 | `mapChunk` | `(chunk) => Uint8Array \| Promise<Uint8Array>` | Transform or redact each chunk before upload. Return `undefined` to drop a chunk. |
 | `onUploadStart` | `() => void` | Invoked just before the background upload begins. |
@@ -268,6 +266,8 @@ const { client, upload } = tap(webStream, {
 | `onUploadError` | `(error) => void` | Called when the upload fails. |
 | `logger` | `Logger` | Inject a custom logger implementation. Defaults to a console-backed logger. |
 | `fetchImpl` | `typeof fetch` | Provide an alternative fetch implementation (e.g. for testing). |
+
+> **Note:** All data is automatically compressed with gzip before upload. This cannot be disabled as the Guardian ingest service expects compressed data.
 
 Returns an object `{ client, upload }` where:
 

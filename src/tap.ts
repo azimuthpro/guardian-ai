@@ -27,10 +27,9 @@ type NodeReadableStream = NodeJS.ReadableStream;
  * const { client, upload } = tap(nodeStream, 'my-api-key');
  *
  * @example
- * // With full options (compression defaults to 'gzip')
+ * // With full options (data is automatically compressed with gzip before upload)
  * const { client, upload } = tap(webStream, {
  *   apiKey: 'my-key',
- *   compression: 'br',
  *   onUploadError: (err) => console.error(err)
  * });
  */

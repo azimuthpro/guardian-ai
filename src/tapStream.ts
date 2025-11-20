@@ -2,7 +2,7 @@ import { ReadableStream } from 'node:stream/web';
 import { createLogger } from './logger';
 import { TapOptions, TapResult, Logger } from './types';
 import { streamTee } from './utils/streamTee';
-import { applyCompression } from './utils/compression';
+import { compressForUpload } from './utils/compression';
 import { uploadStream } from './utils/upload';
 
 const DEFAULT_ENDPOINT = 'https://guardian.azimuthpro.com/ingest';
@@ -22,7 +22,6 @@ export function tapStream(
   const upload = (async () => {
     let workingStream: ReadableStream<Uint8Array> = uploadSource;
     const {
-      compression = 'none',
       headers = {},
       mapChunk,
       endpoint = DEFAULT_ENDPOINT,
@@ -38,14 +37,11 @@ export function tapStream(
       ...headers
     };
 
-    if (compression && compression !== 'none') {
-      logger.debug('Applying compression', compression);
-      const compressed = await applyCompression(workingStream, compression);
-      workingStream = compressed.stream;
-      if (compressed.encoding) {
-        headerBag['Content-Encoding'] = compressed.encoding;
-      }
-    }
+    // Always apply gzip compression for upload (server expects compressed data)
+    logger.debug('Applying gzip compression for upload');
+    const compressed = await compressForUpload(workingStream);
+    workingStream = compressed.stream;
+    headerBag['Content-Encoding'] = compressed.encoding;
 
     const apiKey = options.apiKey ?? process.env.GUARDIAN_API_KEY;
     if (apiKey) {

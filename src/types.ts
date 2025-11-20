@@ -1,7 +1,5 @@
 import type { ReadableStream } from 'node:stream/web';
 
-export type CompressionStrategy = 'gzip' | 'deflate' | 'br' | 'none';
-
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 export interface Logger {
@@ -28,7 +26,6 @@ export interface TapCallbacks {
 export interface TapOptions extends TapCallbacks {
   apiKey?: string;
   endpoint?: string;
-  compression?: CompressionStrategy;
   headers?: Record<string, string>;
   mapChunk?: (chunk: Uint8Array) => Uint8Array | undefined | Promise<Uint8Array | undefined>;
   logger?: Logger;

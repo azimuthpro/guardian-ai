@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-11-20
+
+### BREAKING CHANGES
+
+- **Removed `compression` option from user-facing API** - Compression is now automatic and always uses gzip
+- **Removed `CompressionStrategy` type export** - No longer needed as compression strategy cannot be configured
+- All uploads are now automatically compressed with gzip before being sent to the Guardian ingest service
+- This change ensures compatibility with the server which always expects gzipped data
+
+### Changed
+
+- Compression is now applied internally and automatically (not user-configurable)
+- Simplified compression utility to gzip-only implementation
+- Updated all documentation to reflect automatic compression
+
+### Rationale
+
+The Guardian ingest server always expects gzip-compressed data. Making compression optional caused confusion and potential upload failures when users didn't enable it or chose incompatible compression methods. By enforcing gzip compression automatically, we ensure reliable uploads and reduce configuration complexity.
+
+### Migration Guide
+
+If you were using the `compression` option:
+
+**Before (v0.3.x):**
+```typescript
+const { client, upload } = tap(stream, {
+  compression: 'gzip',
+  apiKey: 'your-key'
+});
+```
+
+**After (v0.4.0):**
+```typescript
+// Simply remove the compression option - it's now automatic
+const { client, upload } = tap(stream, {
+  apiKey: 'your-key'
+});
+```
+
+Data is automatically compressed with gzip before upload. No configuration needed.
+
 ## [0.3.1] - 2025-11-20
 
 ### Fixed
