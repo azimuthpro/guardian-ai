@@ -34,3 +34,21 @@ This is an early-stage project. The core functionality will involve:
 - Security controls for AI agent workforces
 
 When implementing features, ensure TypeScript compilation with `tsc` produces proper type definitions for library consumers.
+
+## Recent Updates (v0.3.0 - 2025-11-20)
+
+### Simplified tap() API
+
+The library now provides two APIs for stream tapping:
+
+1. **`tap()` - Simplified convenience function** (Recommended for most use cases)
+   - Auto-detects stream types (Response, Node.js streams, Web ReadableStreams)
+   - Defaults to gzip compression
+   - Usage: `tap(stream)` or `tap(stream, apiKeyOrOptions)`
+
+2. **`tapStream()` - Full control API** (For advanced use cases)
+   - Requires explicit stream conversion via adapters
+   - All options explicitly specified
+   - Usage: `tapStream(webStream, options)`
+
+When suggesting implementations, prefer the simplified `tap()` API unless users need fine-grained control over stream handling.

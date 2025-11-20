@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-11-20
+
 ### Added
 
 - Simplified `tap()` convenience function with automatic stream type detection
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Default gzip compression for better performance out of the box
 - Comprehensive implementation examples in README (Next.js, Vercel AI SDK, Express)
 - Production-ready integration patterns with session tracking
+- npm package badge and links in README
 
 ### Changed
 
