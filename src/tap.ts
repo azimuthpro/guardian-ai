@@ -51,8 +51,8 @@ export function tap(
 
   // Handle shorthand apiKey string or full options
   const options: TapOptions = typeof apiKeyOrOptions === 'string'
-    ? { apiKey: apiKeyOrOptions, compression: 'gzip' }
-    : { compression: 'gzip', ...apiKeyOrOptions };
+    ? { apiKey: apiKeyOrOptions }
+    : { ...apiKeyOrOptions };
 
   return tapStream(webStream, options);
 }

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **CRITICAL**: Fixed upload failure in `tap()` function caused by default gzip compression creating backpressure deadlock in Web Streams tee
+- Compression now defaults to 'none' (matching `tapStream()` behavior) to prevent blocking when client stream is not immediately consumed
+
 ## [0.3.0] - 2025-11-20
 
 ### Added

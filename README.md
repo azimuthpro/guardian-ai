@@ -17,7 +17,7 @@ View on npm: [@azimuthpro/guardian-ai](https://www.npmjs.com/package/@azimuthpro
 ```ts
 import { tap } from '@azimuthpro/guardian-ai';
 
-// Auto-detects stream type and defaults to gzip compression
+// Auto-detects stream type, uses env GUARDIAN_API_KEY
 const { client, upload } = tap(response);
 
 // Forward the tapped stream to your downstream consumer
@@ -75,6 +75,7 @@ export async function POST(request: Request) {
 
   // Tap the stream - auto-detects Response type
   const { client, upload } = tap(upstream, {
+    compression: 'gzip', // Optional: compress upload data
     headers: {
       'X-Session-Id': crypto.randomUUID(),
       'X-User-Id': 'user-123',
@@ -126,7 +127,7 @@ export async function POST(request: Request) {
   // Monitor with Guardian AI
   const sessionId = crypto.randomUUID();
   const { client, upload } = tap(response, {
-    compression: 'gzip',
+    compression: 'gzip', // Optional: compress upload data
     headers: {
       'X-Session-Id': sessionId,
       'X-Model-Name': 'gemini-2.0-flash',
@@ -220,7 +221,7 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 
 ## tap(stream, apiKeyOrOptions)
 
-Simplified API with automatic stream type detection. **Defaults to gzip compression.**
+Simplified API with automatic stream type detection.
 
 | Parameter | Type | Description |
 | --- | --- | --- |
@@ -232,16 +233,22 @@ Simplified API with automatic stream type detection. **Defaults to gzip compress
 ### Examples
 
 ```ts
-// Simplest - auto-detects Response, uses env GUARDIAN_API_KEY, gzip compression
+// Simplest - auto-detects Response, uses env GUARDIAN_API_KEY
 const { client, upload } = tap(response);
 
 // With explicit API key
 const { client, upload } = tap(nodeStream, 'gdn_abc123...');
 
+// With compression (recommended for production)
+const { client, upload } = tap(response, {
+  compression: 'gzip',
+  headers: { 'X-Session-Id': sessionId },
+});
+
 // With full options
 const { client, upload } = tap(webStream, {
   apiKey: process.env.GUARDIAN_API_KEY,
-  compression: 'br', // override default gzip
+  compression: 'gzip',
   headers: { 'X-Session-Id': sessionId },
   onUploadError: console.error,
 });
