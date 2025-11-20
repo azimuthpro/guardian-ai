@@ -1,6 +1,6 @@
 {
   "name": "@azimuthpro/guardian-ai",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "An AI agent that provides real-time monitoring, behavioral analysis, and security for your AI agent workforce.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
