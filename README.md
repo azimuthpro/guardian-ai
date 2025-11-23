@@ -257,6 +257,7 @@ const { client, upload } = tap(webStream, {
   apiKey: process.env.GUARDIAN_API_KEY,
   headers: { 'X-Session-Id': crypto.randomUUID() },
   onUploadError: console.error,
+  author: 'ai' // Optional: 'human' | 'ai'
 });
 ```
 
@@ -275,6 +276,7 @@ const { client, upload } = tap(webStream, {
 | `onUploadError` | `(error) => void` | Called when the upload fails. |
 | `logger` | `Logger` | Inject a custom logger implementation. Defaults to a console-backed logger. |
 | `fetchImpl` | `typeof fetch` | Provide an alternative fetch implementation (e.g. for testing). |
+| `author` | `'human' \| 'ai'` | Optional tag to distinguish between human and AI-authored messages. |
 
 > **Note:** All data is automatically compressed with gzip before upload. This cannot be disabled as the Guardian ingest service expects compressed data.
 
