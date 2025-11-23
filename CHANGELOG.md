@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-11-23
+
+### Added
+
+- X-Author header support in `tapStream()` via new `author` option in TapOptions
+- Allows tracking of stream origins by sending an 'X-Author' header with uploads
+
+### Changed
+
+- Refactored test mocks for improved consistency and clarity
+- Simplified async iterator cancellation logic in `fromAsyncIterator`
+- Enhanced project positioning as streaming-first telemetry SDK in documentation
+
+### Fixed
+
+- Minor code improvements and formatting enhancements
+
 ## [0.4.0] - 2025-11-20
 
 ### BREAKING CHANGES
