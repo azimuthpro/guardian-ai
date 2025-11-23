@@ -38,6 +38,7 @@ describe('adapters', () => {
 
   it('wraps an async iterator as a ReadableStream', async () => {
     async function* generator() {
+      await Promise.resolve();
       yield encoder.encode('chunk-1');
       yield encoder.encode('chunk-2');
     }

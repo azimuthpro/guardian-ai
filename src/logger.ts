@@ -23,6 +23,7 @@ export function createLogger(options: LoggerOptions = {}): Logger {
       transport[logLevel] ??
       transport.log ??
       ((...inner: unknown[]) => {
+        // eslint-disable-next-line no-console
         console.log(...inner);
       });
 

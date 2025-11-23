@@ -17,7 +17,7 @@ export function fromAsyncIterator(
         controller.enqueue(result.value);
       }
     },
-    async cancel(reason) {
+    async cancel() {
       if (typeof asyncIterator.return === 'function') {
         await asyncIterator.return(undefined);
       }

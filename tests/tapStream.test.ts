@@ -45,7 +45,7 @@ describe('tapStream', () => {
   it('tees the stream and uploads with automatic gzip compression', async () => {
     const source = createStreamFromStrings(['hello', 'world']);
 
-    const fetchMock = jest.fn(async (_url, init?: any) => {
+    const fetchMock = jest.fn(async (_, init?: any) => {
       const body = init?.body as ReadableStream<Uint8Array>;
       const chunks = await readStream(body);
       const buffer = Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
@@ -65,7 +65,7 @@ describe('tapStream', () => {
 
     await expect(upload).resolves.toBeUndefined();
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const [_url, init] = fetchMock.mock.calls[0];
+    const [, init] = fetchMock.mock.calls[0];
     expect(init?.duplex).toBe('half');
     expect(init?.headers).toMatchObject({
       Authorization: 'Bearer test-key',
@@ -76,7 +76,7 @@ describe('tapStream', () => {
 
   it('maps chunks before compression and upload when mapChunk is provided', async () => {
     const source = createStreamFromStrings(['foo', 'bar']);
-    const fetchMock = jest.fn(async (_url, init?: any) => {
+    const fetchMock = jest.fn(async (_, init?: any) => {
       const body = init?.body as ReadableStream<Uint8Array>;
       const chunks = await readStream(body);
       const buffer = Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
@@ -89,7 +89,7 @@ describe('tapStream', () => {
     const { upload } = tapStream(source, {
       apiKey: 'key',
       fetchImpl: fetchMock,
-      mapChunk: async (chunk) => encoder.encode(decoder.decode(chunk).toUpperCase())
+      mapChunk: (chunk) => Promise.resolve(encoder.encode(decoder.decode(chunk).toUpperCase()))
     });
 
     await expect(upload).resolves.toBeUndefined();
@@ -101,8 +101,8 @@ describe('tapStream', () => {
     const onUploadComplete = jest.fn();
     const onUploadError = jest.fn();
 
-    const failingFetch = jest.fn(async () => {
-      return { ok: false, status: 500, body: null } as unknown as Response;
+    const failingFetch = jest.fn(() => {
+      return Promise.resolve({ ok: false, status: 500, body: null } as unknown as Response);
     });
 
     const { upload } = tapStream(source, {
@@ -130,8 +130,8 @@ describe('tapStream', () => {
   });
   it('sends X-Author header when author option is provided', async () => {
     const source = createStreamFromStrings(['data']);
-    const fetchMock = jest.fn(async () => {
-      return { ok: true, status: 200, body: null } as unknown as Response;
+    const fetchMock = jest.fn(() => {
+      return Promise.resolve({ ok: true, status: 200, body: null } as unknown as Response);
     });
 
     const { upload } = tapStream(source, {
@@ -142,7 +142,7 @@ describe('tapStream', () => {
 
     await expect(upload).resolves.toBeUndefined();
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const [_url, init] = fetchMock.mock.calls[0];
+    const [, init] = fetchMock.mock.calls[0];
     expect(init?.headers).toMatchObject({
       'X-Author': 'human'
     });
