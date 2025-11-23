@@ -30,6 +30,7 @@ export interface TapOptions extends TapCallbacks {
   mapChunk?: (chunk: Uint8Array) => Uint8Array | undefined | Promise<Uint8Array | undefined>;
   logger?: Logger;
   fetchImpl?: typeof fetch;
+  author?: 'human' | 'ai';
 }
 
 export interface TapResult {

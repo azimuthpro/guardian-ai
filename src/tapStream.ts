@@ -50,6 +50,10 @@ export function tapStream(
       logger.warn('No Guardian API key provided; proceeding without Authorization header.');
     }
 
+    if (options.author) {
+      headerBag['X-Author'] = options.author;
+    }
+
     options.onUploadStart?.();
     logger.info('Starting Guardian upload', { endpoint, headers: headerBag });
 

@@ -128,4 +128,23 @@ describe('tapStream', () => {
     expect(onUploadError).toHaveBeenCalledTimes(1);
     expect(onUploadComplete).not.toHaveBeenCalled();
   });
+  it('sends X-Author header when author option is provided', async () => {
+    const source = createStreamFromStrings(['data']);
+    const fetchMock = jest.fn(async () => {
+      return { ok: true, status: 200, body: null } as unknown as Response;
+    });
+
+    const { upload } = tapStream(source, {
+      apiKey: 'key',
+      fetchImpl: fetchMock,
+      author: 'human'
+    });
+
+    await expect(upload).resolves.toBeUndefined();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [_url, init] = fetchMock.mock.calls[0];
+    expect(init?.headers).toMatchObject({
+      'X-Author': 'human'
+    });
+  });
 });
